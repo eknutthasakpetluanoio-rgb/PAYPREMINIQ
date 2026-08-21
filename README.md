@@ -14,9 +14,9 @@ PAYPREMINIQ/
 ├── icon-192.png
 ├── icon-512.png
 └── products/
-    ├── redmi-watch-5-lite.svg
-    ├── soundcore-r60i-nc.svg
-    └── vivo-v70.svg
+    ├── redmi-watch-5-lite.png
+    ├── soundcore-r60i-nc.png
+    └── vivo-v70.png
 ```
 
 ## ไฟล์ที่ตัดออก
@@ -27,7 +27,7 @@ PAYPREMINIQ/
 - `pwa-install.js`
 - โฟลเดอร์ `js/`
 - โฟลเดอร์ `css/`
-- โฟลเดอร์ `icon/` ที่มีไอคอนซ้ำ
+- โฟลเดอร์ `icon-192.png` และ `icon-512.png` ที่มีไอคอนซ้ำ
 - `README.txt`
 - `INDEX-PWA-INTEGRATION.txt`
 - `PWA-FINAL-AUDIT.txt`
