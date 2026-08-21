@@ -1,5 +1,5 @@
 // PAYPREMINIQ — Service Worker
-const CACHE_NAME = "paypreminiq-pwa-v17-new-firebase";
+const CACHE_NAME = "paypreminiq-pwa-v18-pwa-fix";
 
 const APP_SHELL = [
   "./",
