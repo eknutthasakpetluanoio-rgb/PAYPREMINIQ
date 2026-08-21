@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070809">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="PAYPREMINIQ – Smart Payment Intelligence ระบบจัดการสัญญาผ่อนชำระและติดตามการชำระเงิน">
+<meta name="application-name" content="PAYPREMINIQ">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<title>PAYPREMINIQ – Smart Payment Intelligence</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#070809">
+
+</head>
+
+<body>
+
+<div id="app">
+
+  <!-- ==============================
+       TOP BAR
+       V2 keeps the original hooks used by app.js.
+  =============================== -->
+  <header class="topbar" role="banner">
+    <div class="brand-lockup">
+      <img class="app-logo" src="./icon-192.png" alt="PAYPREMINIQ">
+      <div>
+        <div class="brand">PAYPREMINIQ</div>
+        <h1 id="pageTitle">ภาพรวม</h1>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <button class="icon-btn" id="cloudAccount" type="button" aria-label="เข้าสู่ระบบ PAYPREMINIQ Cloud" title="เข้าสู่ระบบ PAYPREMINIQ Cloud"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 18.2h9.6a4.2 4.2 0 0 0 .4-8.38A6 6 0 0 0 5.65 8.9 4.7 4.7 0 0 0 7.2 18.2Z"/><path d="M12 11v6m0 0-2.2-2.2M12 17l2.2-2.2"/></svg></button>
+      <button class="icon-btn" id="installApp" type="button" aria-label="ติดตั้ง PAYPREMINIQ" title="ติดตั้ง PAYPREMINIQ" hidden><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0-4-4m4 4 4-4M5 19h14"/></svg></button>
+      <button
+        class="icon-btn"
+        id="topAction"
+        type="button"
+        aria-label="ขึ้นด้านบน"
+        title="ขึ้นด้านบน"
+      ><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m0 0-5 5m5-5 5 5"/></svg></button>
+    </div>
+  </header>
+
+  <!-- ==============================
+       MAIN VIEW
+  =============================== -->
+  <main id="view" role="main" tabindex="-1"></main>
+
+  <!-- ==============================
+       FLOATING ACTION BUTTON
+  =============================== -->
+  <button
+    class="fab"
+    id="fab"
+    type="button"
+    aria-label="เพิ่มรายการ"
+    aria-haspopup="dialog"
+  >
+    <span aria-hidden="true">+</span>
+    <small id="fabLabel">สัญญา</small>
+  </button>
+
+  <!-- ==============================
+       BOTTOM NAVIGATION
+  =============================== -->
+  <nav class="bottom-nav" aria-label="เมนูหลัก">
+    <button type="button" data-page="dashboard" class="nav-item active" aria-label="ภาพรวม">
+      <svg class="ui-icon nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9Z"/></svg>
+      <small>ภาพรวม</small>
+    </button>
+
+    <button type="button" data-page="contracts" class="nav-item" aria-label="สัญญา">
+      <svg class="ui-icon nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+      <small>สัญญา</small>
+    </button>
+
+    <button type="button" data-page="customers" class="nav-item" aria-label="ลูกค้า">
+      <svg class="ui-icon nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>
+      <small>ลูกค้า</small>
+    </button>
+
+    <button type="button" data-page="settings" class="nav-item" aria-label="ตั้งค่า">
+      <svg class="ui-icon nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.3a3.7 3.7 0 1 0 0 7.4 3.7 3.7 0 0 0 0-7.4Z"/><path d="m19 13.5 1.1 1.8-1.8 1.8-1.8-1.1a7.6 7.6 0 0 1-1.8.8L14.4 19h-2.8l-.3-2.2a7.6 7.6 0 0 1-1.8-.8l-1.8 1.1-1.8-1.8L7 13.5a7.6 7.6 0 0 1-.3-1.5L4.5 10.8V8.2l2.2-.3A7.6 7.6 0 0 1 7.5 6L6.4 4.2l1.8-1.8L10 3.5a7.6 7.6 0 0 1 1.6-.7L12 1h2.8l.3 1.8a7.6 7.6 0 0 1 1.8.7l1.8-1.1 1.8 1.8L19.4 6a7.6 7.6 0 0 1 .8 1.8l2.2.3v2.6l-2.2.3a7.6 7.6 0 0 1-.8 1.5Z"/></svg>
+      <small>ตั้งค่า</small>
+    </button>
+  </nav>
+
+</div>
+
+<!-- ==============================
+     MODAL ROOT
+=============================== -->
+<div id="modalRoot" aria-live="polite"></div>
+
+<!-- ==============================
+     IMPORT
+=============================== -->
+<input
+  id="importFile"
+  type="file"
+  accept=".json,application/json"
+  hidden
+>
+
+<noscript>
+  <div style="padding:24px;font-family:sans-serif;background:#09090a;color:#fff;min-height:100vh">
+    PAYPREMINIQ ต้องเปิดใช้งาน JavaScript เพื่อให้ระบบทำงานได้ครบถ้วน
+  </div>
+</noscript>
+
+<!-- ==============================
+     APP
+=============================== -->
+<script type="module" src="./app.js"></script>
+
+
+</body>
+</html>
