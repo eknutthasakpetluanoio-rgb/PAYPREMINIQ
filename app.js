@@ -17,13 +17,14 @@
 const firebaseConfig = {
   // PAYPREMINIQ uses a new Firebase project.
   // Fill these values with the Web App config from the new PAYPREMINIQ Firebase project.
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+apiKey: "AIzaSyBaFiZXhLzqtDs2En5h30tPMrlPIFm72CE",
+  authDomain: "paypreminiq.firebaseapp.com",
+  projectId: "paypreminiq",
+  storageBucket: "paypreminiq.firebasestorage.app",
+  messagingSenderId: "797291768276",
+  appId: "1:797291768276:web:597e15124a54ff61434e41"
 };
+
 
 let firebaseReady = false;
 let firebaseError = null;
