@@ -533,3 +533,115 @@ body::before{
 }
 
 .ui-icon{width:19px;height:19px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}.nav-icon{width:21px;height:21px;stroke-width:1.75}.nav-item .ui-icon{color:currentColor}.icon-btn .ui-icon{color:currentColor}
+
+
+/* =========================================================
+   PAYPREMINIQ — Spacious Premium UI Layer
+   Visual-only refinement. No data / Firebase / JS changes.
+   ========================================================= */
+
+:root {
+  --ppx-space-1: 6px;
+  --ppx-space-2: 10px;
+  --ppx-space-3: 14px;
+  --ppx-space-4: 18px;
+  --ppx-space-5: 24px;
+  --ppx-space-6: 30px;
+  --ppx-radius-soft: 18px;
+  --ppx-radius-card: 22px;
+  --ppx-shadow-soft: 0 8px 28px rgba(0,0,0,.055);
+  --ppx-shadow-lift: 0 12px 34px rgba(0,0,0,.075);
+}
+
+body {
+  letter-spacing: .005em;
+}
+
+main,
+.main,
+.page,
+.page-content,
+.content {
+  gap: var(--ppx-space-5);
+}
+
+.card,
+.panel,
+.stat-card,
+.summary-card,
+.section-card,
+.modal,
+.customer-card,
+.contract-card {
+  border-radius: var(--ppx-radius-card);
+  box-shadow: var(--ppx-shadow-soft);
+}
+
+.card + .card,
+.panel + .panel,
+.stat-card + .stat-card,
+.summary-card + .summary-card,
+.section-card + .section-card,
+.customer-card + .customer-card,
+.contract-card + .contract-card {
+  margin-top: var(--ppx-space-4);
+}
+
+.card,
+.panel,
+.section-card,
+.customer-card,
+.contract-card {
+  padding: clamp(16px, 2.5vw, 24px);
+}
+
+button,
+.btn,
+.wide-btn,
+.primary-btn,
+.secondary-btn,
+.icon-btn {
+  transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+
+button:active,
+.btn:active,
+.wide-btn:active,
+.primary-btn:active,
+.secondary-btn:active,
+.icon-btn:active {
+  transform: scale(.985);
+}
+
+input,
+select,
+textarea {
+  border-radius: var(--ppx-radius-soft);
+}
+
+.modal {
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+@media (max-width: 700px) {
+  .card,
+  .panel,
+  .section-card,
+  .customer-card,
+  .contract-card {
+    padding: 18px;
+  }
+
+  main,
+  .main,
+  .page,
+  .page-content,
+  .content {
+    gap: 18px;
+  }
+
+  .modal {
+    border-radius: 24px;
+  }
+}
