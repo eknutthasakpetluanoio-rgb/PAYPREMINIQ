@@ -1,7 +1,7 @@
 // PAYPREMINIQ — Service Worker
 // Cache strategy: Network-first for same-origin app files, cache fallback for offline.
 // IMPORTANT: This service worker never touches LocalStorage, IndexedDB, Firebase, or user data.
-const CACHE_NAME = "paypreminiq-pwa-v20-build-versioned";
+const CACHE_NAME = "paypreminiq-pwa-v20-2026.08.23-cache-fix-03";
 
 const APP_SHELL = [
   "./",
