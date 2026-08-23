@@ -101,7 +101,27 @@ function waitForFirebaseAuth(timeoutMs = 12000) {
 
 /* ---------- Local Storage ---------- */
 
-const APP_BUILD = "2026.08.23-CACHE-FIX-03";
+let APP_BUILD = "unknown";
+const BUILD_INFO_URL = "./build.json";
+
+async function loadBuildInfo() {
+  try {
+    const response = await fetch(`${BUILD_INFO_URL}?t=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) throw new Error(`build.json HTTP ${response.status}`);
+    const info = await response.json();
+    const build = String(info?.build || "").trim();
+    if (!build) throw new Error("build.json has no build value");
+    APP_BUILD = build;
+
+    const meta = document.querySelector('meta[name="paypreminiq-build"]');
+    if (meta) meta.content = APP_BUILD;
+
+    return APP_BUILD;
+  } catch (error) {
+    console.warn("[PAYPREMINIQ] Build info unavailable:", error);
+    return APP_BUILD;
+  }
+}
 
 const STORAGE_KEY = "paypreminiq_data";
 
@@ -391,7 +411,22 @@ function stopRealtimeSync() {
     if (!("serviceWorker" in navigator)) return null;
 
     try {
-      const registration = await navigator.serviceWorker.register(SW_URL, {
+      // build.json is the single source of truth. The version is used as a
+      // query parameter so changing only build.json creates a new SW script URL.
+      let build = "";
+      try {
+        const response = await fetch(`${BUILD_INFO_URL}?t=${Date.now()}`, { cache: "no-store" });
+        if (response.ok) {
+          const info = await response.json();
+          build = String(info?.build || "").trim();
+        }
+      } catch (_) {}
+
+      const swUrl = build
+        ? `./sw.js?build=${encodeURIComponent(build)}`
+        : "./sw.js";
+
+      const registration = await navigator.serviceWorker.register(swUrl, {
         scope: SW_SCOPE,
         updateViaCache: "none"
       });
@@ -494,6 +529,8 @@ function stopRealtimeSync() {
 
   window.addEventListener("pageshow", showInstallButton);
 })();
+
+await loadBuildInfo();
 
 let data = loadData();
 let page = "dashboard";
@@ -1165,7 +1202,7 @@ function settings() {
       <div class="eyebrow">DATA</div>
       <h2>ข้อมูลของคุณ</h2>
       <p>PAYPREMINIQ เก็บข้อมูลไว้ในเครื่องนี้ด้วย LocalStorage และใช้ฐานข้อมูลชุดเดียวกันทุกหน้า</p>
-      <div class="backup-note"><b>เวอร์ชันระบบ</b><span id="appBuildVersion">Build 2026.08.23-CACHE-FIX-03</span></div>
+      <div class="backup-note"><b>เวอร์ชันระบบ</b><span id="appBuildVersion">Build ${APP_BUILD}</span></div>
       <div class="data-summary">
         <div><b>${data.contracts.length}</b><span>สัญญา</span></div>
         <div><b>${data.customers.length}</b><span>ลูกค้า</span></div>
