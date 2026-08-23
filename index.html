@@ -139,5 +139,51 @@
 <script type="module" src="./app.js"></script>
 
 
+
+<style id="pwa-install-fallback">
+#pwa-install-fallback{display:none;margin:12px 0;padding:12px;border-radius:12px}
+#pwa-install-fallback.show{display:block}
+#pwa-install-fallback button{padding:10px 14px;border:0;border-radius:10px;font-weight:600}
+</style>
+<div id="pwa-install-fallback" role="status">
+  <button type="button" id="pwa-install-help">ติดตั้ง PAYPREMINIQ บนหน้าจอ</button>
+</div>
+<script>
+(function(){
+  let deferredPrompt=null;
+  const box=()=>document.getElementById('pwa-install-fallback');
+  const btn=()=>document.getElementById('pwa-install-help');
+
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault();
+    deferredPrompt=e;
+    const b=box(); if(b) b.classList.add('show');
+  });
+
+  window.addEventListener('appinstalled',()=>{
+    deferredPrompt=null;
+    const b=box(); if(b) b.classList.remove('show');
+  });
+
+  document.addEventListener('click',async e=>{
+    if(!e.target || e.target.id!=='pwa-install-help') return;
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      try{ await deferredPrompt.userChoice; }catch(_){}
+      deferredPrompt=null;
+      return;
+    }
+    // Chrome Android may not expose beforeinstallprompt. Give the supported manual path.
+    alert('ใน Chrome Android ให้กดเมนู ⋮ แล้วเลือก “ติดตั้งแอป” หรือ “เพิ่มลงในหน้าจอหลัก” หากตัวเลือกนี้ปรากฏ');
+  });
+
+  // If already running as an installed app, don't show fallback.
+  const standalone=window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if(!standalone){
+    const b=box(); if(b) b.classList.add('show');
+  }
+})();
+</script>
+
 </body>
 </html>
