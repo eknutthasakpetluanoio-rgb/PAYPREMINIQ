@@ -1,5 +1,7 @@
 // PAYPREMINIQ — Service Worker
-const CACHE_NAME = "paypreminiq-pwa-v18-pwa-fix";
+// Cache strategy: Network-first for same-origin app files, cache fallback for offline.
+// IMPORTANT: This service worker never touches LocalStorage, IndexedDB, Firebase, or user data.
+const CACHE_NAME = "paypreminiq-pwa-v19-cache-update-fix";
 
 const APP_SHELL = [
   "./",
@@ -39,12 +41,13 @@ self.addEventListener("fetch", event => {
   const url = new URL(request.url);
 
   // Never intercept third-party Firebase/CDN requests.
-  // Let the browser fetch Firebase SDK modules directly.
   if (url.origin !== self.location.origin) return;
 
+  // HTML/navigation: always try the live GitHub Pages response first.
+  // This prevents stale index.html from masking a newly deployed version.
   if (request.mode === "navigate") {
     event.respondWith(
-      fetch(request)
+      fetch(request, { cache: "no-store" })
         .then(response => {
           if (response.ok) {
             const copy = response.clone();
@@ -59,6 +62,28 @@ self.addEventListener("fetch", event => {
     return;
   }
 
+  // App assets: network-first so CSS/JS changes appear without manually
+  // clearing browser/app data. Fall back to the current cache when offline.
+  const isAppAsset = /\.(?:css|js|json|png|jpg|jpeg|webp|svg|ico|woff2?)$/i.test(url.pathname);
+
+  if (isAppAsset) {
+    event.respondWith(
+      fetch(request, { cache: "no-store" })
+        .then(response => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME)
+              .then(cache => cache.put(request, copy))
+              .catch(() => {});
+          }
+          return response;
+        })
+        .catch(() => caches.match(request).then(cached => cached || caches.match("./index.html")))
+    );
+    return;
+  }
+
+  // Other same-origin GET requests: cache-first with network fallback.
   event.respondWith(
     caches.match(request)
       .then(cached => cached || fetch(request).then(response => {
