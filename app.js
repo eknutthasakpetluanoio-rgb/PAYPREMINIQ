@@ -101,6 +101,8 @@ function waitForFirebaseAuth(timeoutMs = 12000) {
 
 /* ---------- Local Storage ---------- */
 
+const APP_BUILD = "2026.08.23-CACHE-FIX-01";
+
 const STORAGE_KEY = "paypreminiq_data";
 
 const DEFAULT_DATA = {
@@ -1163,6 +1165,7 @@ function settings() {
       <div class="eyebrow">DATA</div>
       <h2>ข้อมูลของคุณ</h2>
       <p>PAYPREMINIQ เก็บข้อมูลไว้ในเครื่องนี้ด้วย LocalStorage และใช้ฐานข้อมูลชุดเดียวกันทุกหน้า</p>
+      <div class="backup-note"><b>เวอร์ชันระบบ</b><span id="appBuildVersion">Build 2026.08.23-CACHE-FIX-01</span></div>
       <div class="data-summary">
         <div><b>${data.contracts.length}</b><span>สัญญา</span></div>
         <div><b>${data.customers.length}</b><span>ลูกค้า</span></div>
