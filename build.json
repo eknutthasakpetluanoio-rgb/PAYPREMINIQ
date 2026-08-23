@@ -1,5 +1,5 @@
 {
   "app": "PAYPREMINIQ",
-  "build": 2026.08.23-CACHE-TEST-05",
+  "build": "2026.08.23-CACHE-TEST-05",
   "purpose": "Single source of truth for PAYPREMINIQ build and PWA cache version"
 }
