@@ -1,14 +1,17 @@
-# PAYPREMINIQ – Smart Payment Intelligence
+# PAYPREMINIQ
 
-โครงสร้างนี้เป็นชุดไฟล์ที่ใช้งานจริงของ PAYPREMINIQ โดยตัดไฟล์ซ้ำ ไฟล์เก่า และไฟล์ที่ไม่ได้ถูกเรียกใช้ออกจาก ZIP แล้ว
+**PAYPREMINIQ – Smart Payment Intelligence**
 
-## โครงสร้าง
+ระบบจัดการสัญญาผ่อนชำระและติดตามการชำระเงิน โดยคงโครงสร้างหน้าจอ ปุ่ม เมนู ฟอร์ม ฟังก์ชัน และโครงสร้างข้อมูลเดิมของ PAYPREMINIQ เป็นหลัก
+
+## โครงสร้างปัจจุบัน
 
 ```text
 PAYPREMINIQ/
 ├── index.html
 ├── style.css
 ├── app.js
+├── build.json
 ├── manifest.json
 ├── sw.js
 ├── icon-192.png
@@ -19,46 +22,34 @@ PAYPREMINIQ/
     └── vivo-v70.png
 ```
 
-## ไฟล์ที่ตัดออก
+## ระบบหลัก
 
-- `firebase.js`
-- `firestore-sync.js`
-- `storage.js`
-- `pwa-install.js`
-- โฟลเดอร์ `js/`
-- โฟลเดอร์ `css/`
-- โฟลเดอร์ `icon-192.png` และ `icon-512.png` ที่มีไอคอนซ้ำ
-- `README.txt`
-- `INDEX-PWA-INTEGRATION.txt`
-- `PWA-FINAL-AUDIT.txt`
-- `PWA-VALIDATION.txt`
+- LocalStorage สำหรับข้อมูล PAYPREMINIQ บนอุปกรณ์
+- ระบบ recovery สำหรับช่วยกู้คืนข้อมูลก่อนหน้า
+- Firebase Authentication และ Firestore สำหรับ Cloud
+- PWA / Service Worker สำหรับการเปิดใช้งานแบบ standalone และการอัปเดตไฟล์
+- ระบบ Import / Export ข้อมูล
+- ระบบคำนวณและติดตามงวดชำระตามโครงสร้างข้อมูลเดิมของแอป
 
-Firebase, LocalStorage และ PWA ที่ใช้งานจริงถูกรวมอยู่ใน `app.js` และ `sw.js` แล้ว จึงไม่จำเป็นต้องเก็บไฟล์ helper รุ่นเก่าไว้ซ้ำอีก
+## Data Safety
 
-## Data Safety Fix
+- ข้อมูล LocalStorage ที่มีข้อมูลจริงจะไม่ถูกลบเพียงเพราะ Cloud ว่างหรือผิดรูปแบบ
+- เมื่อเครื่องว่างแต่ Cloud มีข้อมูล ระบบสามารถกู้ข้อมูลจาก Cloud ลงเครื่อง
+- เก็บข้อมูลก่อนหน้าไว้ใน `paypreminiq_recovery` เพื่อช่วยกู้คืนกรณีข้อมูลถูกแทนที่โดยไม่ตั้งใจ
+- การซิงก์ Cloud ใช้แนวทาง conservative เพื่อไม่ให้ข้อมูลจากอีกฝั่งถูกเขียนทับโดยอัตโนมัติโดยไม่มีข้อมูล revision รายรายการ
 
-- ป้องกัน Cloud/Firebase ที่ว่างไม่ให้เขียนทับฐานข้อมูล LocalStorage ที่มีข้อมูลอยู่
-- หากเครื่องมีข้อมูลแต่ Cloud ว่าง ระบบจะใช้ข้อมูลจากเครื่องและซ่อม Cloud ให้กลับมาตามข้อมูลเดิม
-- หากเครื่องว่างแต่ Cloud มีข้อมูล ระบบจะกู้ข้อมูลจาก Cloud ลงเครื่อง
-- เก็บฐานข้อมูล LocalStorage ก่อนหน้าไว้ใน recovery slot เมื่อมีข้อมูลจริง เพื่อช่วยกู้คืนกรณีข้อมูลถูกแทนที่โดยไม่ตั้งใจ
+## Firebase
 
-## หมายเหตุ
+PAYPREMINIQ ใช้ Firebase project ของ PAYPREMINIQ สำหรับ Authentication และ Firestore โดยโหลด Firebase แบบ lazy/background เพื่อไม่ให้การเชื่อมต่อ Cloud ขัดขวางการเปิดแอปและการใช้งาน Local mode
 
-- รูปสินค้าใน `products/` ยังถูกใช้งานโดย `app.js` จึงเก็บไว้
-- ไอคอน PWA ที่ใช้งานจริงคือ `icon-192.png` และ `icon-512.png` ที่ root
-- ไม่ได้เปลี่ยนข้อมูลธุรกิจหรือโครงสร้างข้อมูลของผู้ใช้ในรอบการตัดไฟล์นี้
+## PWA และการอัปเดต
 
+`build.json` เป็น source of truth ของ build version โดย Service Worker ใช้ build version เพื่อสร้าง cache รุ่นใหม่และลบ cache รุ่นเก่า การอัปเดตไฟล์หลักใช้ network-first และมี fallback จาก cache เมื่อออฟไลน์
 
-## PAYPREMINIQ Core Revision
+## หลักการพัฒนา
 
-This revision introduces a single `PAYPREMINIQCore` calculation layer in `app.js` for installment dates, installment status, payment-to-installment mapping, outstanding balances, due-soon/overdue classification, and payment validation.
-
-Existing UI code remains in place so the revision can be tested incrementally without replacing the existing Firebase/data workflow.
-
-
-## PAYPREMINIQ Firebase — New Project
-
-This clean build is intentionally disconnected from the legacy Firebase project.  
-Create a new Firebase project for PAYPREMINIQ, register a Web App, enable Email/Password Authentication and Firestore, then place the new Web App configuration in `app.js` inside `firebaseConfig`.
-
-Until the new configuration is supplied, the app remains usable in local mode and the existing UI is preserved.
+- ใช้ `PAYPREMINIQ-main.zip` เป็น Master/Baseline จนกว่าจะมีคำสั่งให้ล็อกเวอร์ชันใหม่
+- รักษา UI เดิม สีเดิม และ visual identity เดิม
+- ไม่เปลี่ยนโครงสร้างข้อมูลโดยไม่จำเป็น
+- ไม่สร้างหน้าจอ ปุ่ม เมนู หรือข้อมูลใหม่แทนของเดิม
+- แก้เฉพาะจุดที่จำเป็นต่อความถูกต้อง ความปลอดภัยของข้อมูล และการทำงานของระบบ

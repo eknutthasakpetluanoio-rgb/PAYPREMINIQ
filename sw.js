@@ -20,7 +20,7 @@ const APP_SHELL = [
 
 async function readBuildName() {
   try {
-    const response = await fetch("./build.json?sw=" + Date.now(), {
+    const response = await fetch("./build.json", {
       cache: "no-store",
       credentials: "same-origin"
     });
@@ -100,16 +100,23 @@ self.addEventListener("fetch", event => {
         .then(response => {
           if (response.ok) {
             const copy = response.clone();
+            // build.json is fetched with no-store and must have one stable
+            // cache key; otherwise timestamp/query variants accumulate.
+            const cacheRequest = url.pathname.endsWith("/build.json")
+              ? new Request(new URL("./build.json", self.location.origin), { method: "GET" })
+              : request;
             caches.open(ACTIVE_CACHE_NAME)
-              .then(cache => cache.put(request, copy))
+              .then(cache => cache.put(cacheRequest, copy))
               .catch(() => {});
           }
           return response;
         })
         .catch(() =>
-          caches.match(request).then(cached =>
-            cached || caches.match("./index.html")
-          )
+          caches.match(request).then(cached => {
+            if (cached) return cached;
+            if (url.pathname.endsWith("/build.json")) return caches.match("./build.json");
+            return caches.match("./index.html");
+          })
         )
     );
     return;

@@ -1,5 +1,5 @@
 {
   "app": "PAYPREMINIQ",
-  "build": "2026.08.23-PWA-INSTALL-01",
+  "build": "2026.08.25-PWA-SYNC-HARDEN-01",
   "purpose": "Single source of truth for PAYPREMINIQ build and PWA cache version"
 }

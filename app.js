@@ -3,7 +3,7 @@
    Single-file application controller.
    The original PAYPREMINIQ business/UI logic is preserved here;
    storage, Firebase sync, and PWA controller are consolidated
-   so the project remains exactly six files.
+   in the current PAYPREMINIQ project structure.
 ========================================================= */
 
 (async function bootPaypreminiq(){
@@ -36,8 +36,8 @@ let createUserWithEmailAndPassword, signOut, getFirestore, doc, getDoc;
 let setDoc, onSnapshot, serverTimestamp;
 
 async function initializeFirebaseInBackground() {
-  // Firebase is intentionally disconnected until the new PAYPREMINIQ
-  // Firebase Web App configuration is supplied. Local mode remains usable.
+  // Firebase is configured for the PAYPREMINIQ project. Local mode remains
+  // usable even when remote Firebase modules or the network are unavailable.
   if (!firebaseConfig.apiKey || !firebaseConfig.projectId || !firebaseConfig.appId) {
     firebaseReady = false;
     firebaseError = { code: "paypreminiq-firebase-not-configured" };
@@ -106,7 +106,7 @@ const BUILD_INFO_URL = "./build.json";
 
 async function loadBuildInfo() {
   try {
-    const response = await fetch(`${BUILD_INFO_URL}?t=${Date.now()}`, { cache: "no-store" });
+    const response = await fetch(BUILD_INFO_URL, { cache: "no-store" });
     if (!response.ok) throw new Error(`build.json HTTP ${response.status}`);
     const info = await response.json();
     const build = String(info?.build || "").trim();
@@ -336,15 +336,19 @@ async function syncInitialData(localData) {
 
   const cloudData = snapshot.data()?.data;
   const chosen = mergeDataWithoutLoss(safeLocal, cloudData);
+  const localHasData = hasMeaningfulData(safeLocal);
+  const cloudHasData = hasMeaningfulData(cloudData);
 
-  // If local contains real data and Cloud is empty/invalid, repair Cloud from
-  // the local copy instead of destroying the local copy.
-  if (hasMeaningfulData(safeLocal) && !hasMeaningfulData(cloudData)) {
+  // Never overwrite a populated Cloud document merely because the device also
+  // has data. Without per-record revision timestamps there is no safe way to
+  // prove which side is newer. Only repair an empty/invalid Cloud document
+  // from populated local data; this makes login non-destructive.
+  if (localHasData && !cloudHasData) {
     await setDoc(ref, {
       data: clone(chosen),
       updatedAt: serverTimestamp()
     }, {merge: true});
-  } else if (!hasMeaningfulData(safeLocal) && hasMeaningfulData(cloudData)) {
+  } else if (!localHasData && cloudHasData) {
     saveLocalData(chosen);
   }
 
@@ -415,7 +419,7 @@ function stopRealtimeSync() {
       // query parameter so changing only build.json creates a new SW script URL.
       let build = "";
       try {
-        const response = await fetch(`${BUILD_INFO_URL}?t=${Date.now()}`, { cache: "no-store" });
+        const response = await fetch(BUILD_INFO_URL, { cache: "no-store" });
         if (response.ok) {
           const info = await response.json();
           build = String(info?.build || "").trim();
@@ -777,17 +781,9 @@ async function bootstrapCloud() {
     data = saveLocalData(cloudData);
     render();
 
-    // After the safety decision, publish the preserved device copy to Cloud.
-    // This repairs an empty/stale Cloud document instead of allowing it to
-    // erase the device database.
-    cloudWriteInProgress = true;
-    try {
-      await setCloudData(data);
-    } catch (error) {
-      console.warn("PAYPREMINIQ cloud repair skipped:", error);
-    } finally {
-      cloudWriteInProgress = false;
-    }
+    // Do not publish the local copy here when Cloud is already populated.
+    // Regular user edits still call persist(), which writes intentional local
+    // changes to Cloud. Login itself must not overwrite Cloud blindly.
 
     startRealtimeSync(cloudData => {
       // Never call saveData() here: that would write the incoming Cloud
@@ -2333,9 +2329,10 @@ firebaseAuthPromise = initializeFirebaseInBackground().catch(() => false);
 
 
 /* ===================================
-   PAYPREMINIQ Core Revision
-   Single source of truth for:
+   PAYPREMINIQ Core compatibility layer
+   Optional calculation helpers for:
    Customer / Contract / Installment / Payment
+   The existing UI/data workflow remains the primary application path.
 =================================== */
 
 const PAYPREMINIQCore = (() => {
@@ -2383,8 +2380,8 @@ const PAYPREMINIQCore = (() => {
     const frequencyDays = (frequency) => {
         const f = String(frequency || "").toLowerCase();
         if (f.includes("day") || f.includes("วัน")) return 1;
-        if (f.includes("week") || f.includes("สัปดาห์")) return 7;
         if (f.includes("2") && (f.includes("week") || f.includes("สัปดาห์"))) return 14;
+        if (f.includes("week") || f.includes("สัปดาห์")) return 7;
         return null;
     };
 
