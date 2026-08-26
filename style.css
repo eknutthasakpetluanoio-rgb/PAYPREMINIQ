@@ -69,11 +69,12 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;-webkit-tap-high
 }
 .dashboard-money-grid{
   align-items:stretch;
-  grid-auto-rows:1fr;
+  grid-template-rows:auto;
+  grid-auto-rows:auto;
 }
 .dashboard-money-grid .stat{
   min-width:0;
-  height:auto;
+  height:100%;
   min-height:112px;
   display:flex;
   flex-direction:column;
