@@ -67,8 +67,19 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;-webkit-tap-high
   font-size:9px;
   padding:2px 0 1px;
 }
+.dashboard-money-grid{
+  align-items:stretch;
+}
 .dashboard-money-grid .stat{
   min-width:0;
+  height:100%;
+  min-height:112px;
+  display:flex;
+  flex-direction:column;
+}
+.dashboard-money-grid .stat small{
+  margin-top:auto;
+  padding-top:6px;
 }
 .dashboard-money-grid .stat strong{
   font-size:20px;

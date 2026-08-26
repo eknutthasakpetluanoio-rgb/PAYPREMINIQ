@@ -1,5 +1,6 @@
 {
-  "version": "2026.08.26-DASHBOARD-REFRESH-02",
+  "build": "2026.08.26-DASHBOARD-FIX-03",
+  "version": "2026.08.26-DASHBOARD-FIX-03",
   "title": "PAYPREMINIQ",
-  "note": "Dashboard: removed customer panel; money stats remain in one row; action section removed"
+  "note": "Dashboard: equal-height money cards; customer panel and action section removed"
 }
