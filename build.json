@@ -1,6 +1,6 @@
 {
-  "build": "2026.08.26-DASHBOARD-FIX-05",
-  "version": "2026.08.26-DASHBOARD-FIX-05",
+  "build": "2026.08.26-DASHBOARD-FIX-06",
+  "version": "2026.08.26-DASHBOARD-FIX-06",
   "title": "PAYPREMINIQ",
-  "note": "Dashboard: fixed second money card vertical offset from global card spacing; equal top edge and height"
+  "note": "Dashboard: hard-locked total and outstanding money cards to the same grid row, top edge, and height."
 }

@@ -742,3 +742,23 @@ textarea {
   height: 100% !important;
   min-height: 112px;
 }
+
+/* FIX-06: hard-lock the two dashboard money cards to one shared grid row.
+   This intentionally overrides every generic card spacing rule. */
+.dashboard-money-grid{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  grid-template-rows:minmax(0,1fr) !important;
+  align-items:stretch !important;
+  gap:9px !important;
+}
+.dashboard-money-grid > .stat.card,
+.dashboard-money-grid > .stat.card + .stat.card{
+  margin:0 !important;
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+  align-self:stretch !important;
+  height:100% !important;
+  min-height:112px !important;
+  transform:none !important;
+}

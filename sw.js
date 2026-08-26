@@ -2,7 +2,7 @@
 // build.json is the single source of truth for the build/cache version.
 // This worker never touches LocalStorage, IndexedDB, Firebase, or user data.
 
-const CACHE_PREFIX = "paypreminiq-pwa-v20-";
+const CACHE_PREFIX = "paypreminiq-pwa-v21-";
 const FALLBACK_CACHE = "paypreminiq-pwa-runtime";
 let ACTIVE_CACHE_NAME = FALLBACK_CACHE;
 
