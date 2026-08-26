@@ -1,6 +1,6 @@
 {
-  "build": "2026.08.26-DASHBOARD-FIX-04",
-  "version": "2026.08.26-DASHBOARD-FIX-04",
+  "build": "2026.08.26-DASHBOARD-FIX-05",
+  "version": "2026.08.26-DASHBOARD-FIX-05",
   "title": "PAYPREMINIQ",
-  "note": "Dashboard: equal-height money cards; customer panel and action section removed"
+  "note": "Dashboard: fixed second money card vertical offset from global card spacing; equal top edge and height"
 }

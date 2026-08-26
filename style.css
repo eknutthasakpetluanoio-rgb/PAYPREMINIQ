@@ -728,3 +728,17 @@ textarea {
     border-radius: 24px;
   }
 }
+
+/* FIX-05: dashboard money cards must share the same top edge and height.
+   The global `.card + .card` spacing rule was pushing the second card down. */
+.dashboard-money-grid > .card + .card {
+  margin-top: 0 !important;
+}
+.dashboard-money-grid {
+  align-items: stretch !important;
+}
+.dashboard-money-grid > .stat {
+  margin-top: 0 !important;
+  height: 100% !important;
+  min-height: 112px;
+}
