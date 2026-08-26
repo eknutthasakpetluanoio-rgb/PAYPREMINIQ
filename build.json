@@ -1,5 +1,5 @@
 {
   "app": "PAYPREMINIQ",
-  "build": "2026.08.25-PWA-SYNC-HARDEN-01",
-  "purpose": "Single source of truth for PAYPREMINIQ build and PWA cache version"
+  "build": "2026.08.26-DASHBOARD-REFRESH-01",
+  "purpose": "Dashboard summary reordered: customer photos first, total contracts and outstanding balance on one row, action section removed"
 }

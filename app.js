@@ -978,39 +978,24 @@ function dashboard() {
       <div class="today-chip">${fmtDate(localToday())}</div>
     </div>
 
-    <div class="hero card">
-      <div class="eyebrow">ยอดสัญญาทั้งหมด</div>
-      <div class="hero-number">${money(s.portfolio)}</div>
-      <div class="hero-meta">
-        <span>${s.active} สัญญาที่ยังมียอดค้าง</span>
-        <span>รับแล้ว ${money(s.received)}</span>
-      </div>
-    </div>
+    ${dashboardCustomers()}
 
-    <div class="stat-grid">
+    <div class="stat-grid dashboard-money-grid">
+      <div class="card stat">
+        <span>ยอดสัญญาทั้งหมด</span>
+        <strong>${money(s.portfolio)}</strong>
+        <small>${s.active} สัญญาที่ยังมียอดค้าง · รับแล้ว ${money(s.received)}</small>
+      </div>
       <div class="card stat">
         <span>ยอดค้างรับ</span>
         <strong>${money(s.due)}</strong>
         <small>${s.active ? "มีรายการที่ยังไม่ครบ" : "ไม่มีรายการค้าง"}</small>
-      </div>
-      <div class="card stat">
-        <span>ลูกค้า</span>
-        <strong>${s.customers}</strong>
-        <small>${data.contracts.length} สัญญา</small>
       </div>
     </div> 
     <div class="status-summary card">
       <div><b>สถานะการชำระ</b><span>ค้างกำหนด ${s.overdue} · ครบกำหนดวันนี้ ${s.dueToday}</span></div>
       <span class="summary-dot ${s.overdue ? "has-overdue" : ""}">${s.overdue ? "ต้องติดตาม" : "ปกติ"}</span>
     </div>
-
-    <section class="section">
-      <div class="section-head">
-        <div><div class="eyebrow">ACTION</div><h2>รายการที่ต้องจัดการ</h2></div>
-        <button class="text-btn" data-page="contracts">ดูทั้งหมด</button>
-      </div>
-      ${actionList()}
-    </section>
 
     <section class="section">
       <div class="section-head">
@@ -1022,6 +1007,43 @@ function dashboard() {
         : emptyState("＋", "ยังไม่มีสัญญา", "กดปุ่ม + เพื่อเริ่มสร้างสัญญา")}
     </section>
   </section>`;
+}
+
+function dashboardCustomers() {
+  const customers = [...data.customers]
+    .sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), "th"))
+    .slice(0, 6);
+
+  if (!customers.length) {
+    return `<div class="dashboard-customers card">
+      <div class="dashboard-customers-head">
+        <div>
+          <div class="eyebrow">CUSTOMERS</div>
+          <b>ลูกค้า</b>
+        </div>
+        <button class="text-btn" data-page="customers">เพิ่มลูกค้า</button>
+      </div>
+      <div class="dashboard-customers-empty">ยังไม่มีรูปลูกค้า</div>
+    </div>`;
+  }
+
+  return `<div class="dashboard-customers card">
+    <div class="dashboard-customers-head">
+      <div>
+        <div class="eyebrow">CUSTOMERS</div>
+        <b>ลูกค้า</b>
+      </div>
+      <button class="text-btn" data-page="customers">${data.customers.length} คน</button>
+    </div>
+    <div class="dashboard-avatar-row">
+      ${customers.map(c => {
+        const photo = c.photo
+          ? `<img src="${esc(c.photo)}" alt="${esc(c.name || "ลูกค้า")}">`
+          : `<span>${esc((c.name || "?").charAt(0))}</span>`;
+        return `<button type="button" class="dashboard-avatar" data-customer="${c.id}" title="${esc(c.name || "ลูกค้า")}">${photo}</button>`;
+      }).join("")}
+    </div>
+  </div>`;
 }
 
 function actionList() {
