@@ -724,3 +724,48 @@ textarea {
     border-radius: 24px;
   }
 }
+
+/* =========================================================
+   PAYPREMINIQ — MOBILE DASHBOARD FIX (2026-08-26)
+   Visual/layout only.
+========================================================= */
+@media (max-width:600px){
+  /* Keep dashboard cards compact on phone screens. */
+  .dashboard-money-grid{gap:8px}
+  .dashboard-money-grid .stat{
+    min-height:108px;
+    padding:14px !important;
+    border-radius:20px;
+  }
+  .dashboard-money-grid .stat strong{font-size:20px}
+  .dashboard-money-grid .stat small{font-size:7.5px}
+
+  .status-summary{
+    margin-top:8px;
+    padding:12px 14px;
+    border-radius:19px;
+  }
+
+  .section{margin-top:20px}
+  .section-head{margin-bottom:8px}
+
+  /* Recent contract cards: preserve the compact mobile layout. */
+  .contract-card{
+    padding:13px !important;
+    margin:8px 0;
+    border-radius:21px;
+  }
+  .contract-bottom{margin-top:9px;padding-top:9px}
+
+  /* Fixed navigation must remain visible; content already reserves space for it. */
+  .bottom-nav.chrome-hidden{
+    transform:translateX(-50%) !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
+  }
+  .fab.chrome-hidden{
+    transform:none !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
+  }
+}
