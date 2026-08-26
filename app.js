@@ -978,8 +978,6 @@ function dashboard() {
       <div class="today-chip">${fmtDate(localToday())}</div>
     </div>
 
-    ${dashboardCustomers()}
-
     <div class="stat-grid dashboard-money-grid">
       <div class="card stat">
         <span>ยอดสัญญาทั้งหมด</span>

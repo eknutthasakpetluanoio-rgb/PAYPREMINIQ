@@ -1,5 +1,5 @@
 {
-  "app": "PAYPREMINIQ",
-  "build": "2026.08.26-DASHBOARD-REFRESH-01",
-  "purpose": "Dashboard summary reordered: customer photos first, total contracts and outstanding balance on one row, action section removed"
+  "version": "2026.08.26-DASHBOARD-REFRESH-02",
+  "title": "PAYPREMINIQ",
+  "note": "Dashboard: removed customer panel; money stats remain in one row; action section removed"
 }
